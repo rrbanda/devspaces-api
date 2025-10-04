@@ -11,9 +11,9 @@ devspaces-api/
 │   ├── openapi.json              # Generated OpenAPI spec
 │   └── DevSpaces-Workspace-API.postman_collection.json  # Postman collection
 ├── img/                           # Screenshots and images
-│   ├── Screenshot 2025-10-03 at 9.32.52 PM.png  # API testing
-│   ├── Screenshot 2025-10-03 at 9.33.40 PM.png  # Workspace creation
-│   └── Screenshot 2025-10-03 at 10.41.03 PM.png # Final result
+│   ├── api-testing.png            # API testing screenshots
+│   ├── workspace-creation.png     # Workspace creation process
+│   └── final-result.png           # Final workspace result
 ├── scripts/                       # Shell script tests
 │   └── intellij.sh               # IntelliJ workspace creation script
 ├── test/                          # Python unit tests
@@ -144,7 +144,7 @@ The API will be available at:
 - **Interactive Docs**: http://localhost:8000/docs
 - **OpenAPI Spec**: http://localhost:8000/openapi.json
 
-![API Documentation](img/Screenshot%202025-10-03%20at%209.32.52%20PM.png)
+![API Documentation](img/api-testing.png)
 *FastAPI interactive documentation and API testing*
 
 ### API Endpoints
@@ -183,7 +183,7 @@ curl -H "Authorization: Bearer $OPENSHIFT_TOKEN" \
 
 **Create IntelliJ Workspace:**
 
-![API Testing](img/Screenshot%202025-10-03%20at%209.32.52%20PM.png)
+![API Testing](img/api-testing.png)
 *Testing the API endpoints and workspace creation*
 ```bash
 # Get your token first (if logged in)
@@ -203,7 +203,7 @@ curl -X POST "http://localhost:8000/workspaces/intellij" \
      }'
 ```
 
-![Workspace Creation](img/Screenshot%202025-10-03%20at%209.33.40%20PM.png)
+![Workspace Creation](img/workspace-creation.png)
 *IntelliJ workspace creation in progress*
 
 ### Testing
@@ -301,7 +301,7 @@ Our IntelliJ workspaces include:
 
 ## 🧪 Testing Results
 
-![Final Result](img/Screenshot%202025-10-03%20at%2010.41.03%20PM.png)
+![Final Result](img/final-result.png)
 *Successful IntelliJ workspace creation and running workspace*
 
 Our testing confirmed:
