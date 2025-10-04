@@ -182,9 +182,6 @@ curl -H "Authorization: Bearer $OPENSHIFT_TOKEN" \
 ### Example Usage
 
 **Create IntelliJ Workspace:**
-
-![API Testing](img/api-testing.png)
-*Testing the API endpoints and workspace creation*
 ```bash
 # Get your token first (if logged in)
 TOKEN=$(oc whoami -t)
@@ -202,9 +199,6 @@ curl -X POST "http://localhost:8000/workspaces/intellij" \
        "cpu_limit": "2000m"
      }'
 ```
-
-![Workspace Creation](img/workspace-creation.png)
-*IntelliJ workspace creation in progress*
 
 ### Testing
 
@@ -300,6 +294,9 @@ Our IntelliJ workspaces include:
 3. Ensure you have proper permissions in the target namespace
 
 ## 🧪 Testing Results
+
+![Workspace Creation](img/workspace-creation.png)
+*IntelliJ workspace creation in progress*
 
 ![Final Result](img/final-result.png)
 *Successful IntelliJ workspace creation and running workspace*
