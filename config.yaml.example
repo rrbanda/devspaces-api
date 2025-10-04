@@ -1,0 +1,38 @@
+# DevSpaces API Configuration Template
+# Copy this file to config.yaml and fill in your values
+# config.yaml will be gitignored and not committed
+
+# OpenShift Cluster Configuration
+openshift:
+  api_server: "https://api.<your-cluster-domain>:6443"
+  console_url: "https://console-openshift-console.apps.<your-cluster-domain>"
+  devspaces_url: "https://devspaces.apps.<your-cluster-domain>"
+  
+# Default Workspace Configuration
+workspace:
+  default_namespace: "admin-devspaces"
+  routing_class: "che"
+  
+  # IntelliJ Configuration
+  intellij:
+    memory_limit: "8Gi"
+    memory_request: "2Gi"
+    cpu_limit: "2000m"
+    cpu_request: "500m"
+    container_image: "quay.io/devfile/universal-developer-image:ubi8-latest"
+    default_repo: "https://github.com/spring-projects/spring-petclinic"
+    
+    
+# FastAPI Configuration
+api:
+  title: "DevSpaces Workspace API"
+  description: "API for managing DevSpaces workspaces (IntelliJ)"
+  version: "1.0.0"
+  host: "0.0.0.0"
+  port: 8000
+  debug: false
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

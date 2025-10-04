@@ -1,0 +1,23 @@
+# DevSpaces Workspace API Dependencies
+
+# FastAPI and ASGI server
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
+
+# HTTP client for OpenShift API calls
+httpx>=0.24.0
+
+# Configuration management
+PyYAML>=6.0
+
+# Data validation and serialization
+pydantic>=2.0.0
+
+# Testing dependencies
+pytest>=7.0.0
+pytest-asyncio>=0.20.0
+
+# Development dependencies (optional)
+pytest-cov>=4.0.0  # For test coverage
+black>=23.0.0      # Code formatting
+flake8>=6.0.0      # Linting

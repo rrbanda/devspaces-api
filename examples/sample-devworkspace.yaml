@@ -1,0 +1,24 @@
+# Sample DevWorkspace based on Chapter 8.1.2 documentation
+# This is the exact example from the Red Hat OpenShift Dev Spaces User Guide
+
+kind: DevWorkspace
+apiVersion: workspace.devfile.io/v1alpha2
+metadata:
+  name: my-devworkspace  # 1. Name of the DevWorkspace custom resource. This will be the name of the new workspace.
+  namespace: user1-dev   # 2. User namespace, which is the target project for the new workspace.
+spec:
+  routingClass: che
+  started: true          # 3. Determines whether the workspace must be started when the DevWorkspace custom resource is created.
+  contributions:         # 4. URL reference to the Microsoft Visual Studio Code - Open Source IDE devfile.
+    - name: ide
+      uri: http://devspaces-dashboard.openshift-devspaces.svc.cluster.local:8080/dashboard/api/editors/devfile?che-editor=che-incubator/che-code/latest
+  template:
+    projects:            # 5. Details about the Git repository to clone into the workspace when it starts.
+      - name: my-project-name
+        git:
+          remotes:
+            origin: https://github.com/eclipse-che/che-docs
+    components:          # 6. List of components such as workspace containers and volume components.
+      - name: tooling-container
+        container:
+          image: quay.io/devfile/universal-developer-image:ubi8-latest

@@ -1,0 +1,27 @@
+# DevSpaces API Configuration Template
+# Copy this file to .env and fill in your actual values
+
+# OpenShift Cluster Information
+OPENSHIFT_CONSOLE_URL=https://console-openshift-console.apps.<your-cluster-domain>
+OPENSHIFT_API_SERVER=https://api.<your-cluster-domain>:6443
+OPENSHIFT_USERNAME=<your-username>
+OPENSHIFT_PASSWORD=<your-password>
+
+# DevSpaces User Namespace (usually <username>-devspaces)
+DEVSPACES_NAMESPACE=<your-username>-devspaces
+
+# OAuth Configuration
+OAUTH_SERVER=https://oauth-openshift.apps.<your-cluster-domain>
+OAUTH_CLIENT_ID=openshift-challenging-client
+
+# API Configuration
+API_GROUP=workspace.devfile.io
+API_VERSION=v1alpha2
+
+# Test Configuration
+TEST_WORKSPACE_NAME=test-workspace
+TEST_NAMESPACE=${DEVSPACES_NAMESPACE}
+
+# IntelliJ Configuration
+INTELLIJ_DEVFILE_URI=https://registry.devfile.io/devfiles/intellij-idea-ultimate/latest
+JAVA_PROJECT_URL=https://github.com/spring-projects/spring-petclinic

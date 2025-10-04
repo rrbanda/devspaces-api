@@ -1,0 +1,252 @@
+{
+  "info": {
+    "name": "DevSpaces Workspace API",
+    "description": "API for managing DevSpaces workspaces (IntelliJ and VS Code)",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearer_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "bearer_token",
+      "value": "your-openshift-token-here",
+      "type": "string"
+    },
+    {
+      "key": "namespace",
+      "value": "admin-devspaces",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health & Info",
+      "item": [
+        {
+          "name": "Root Endpoint",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Workspace Management",
+      "item": [
+        {
+          "name": "List Workspaces",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/workspaces/{{namespace}}",
+              "host": ["{{base_url}}"],
+              "path": ["workspaces", "{{namespace}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Workspace",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/workspaces/{{namespace}}/workspace-name",
+              "host": ["{{base_url}}"],
+              "path": ["workspaces", "{{namespace}}", "workspace-name"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Workspace",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/workspaces/{{namespace}}/workspace-name",
+              "host": ["{{base_url}}"],
+              "path": ["workspaces", "{{namespace}}", "workspace-name"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "IntelliJ Workspace",
+      "item": [
+        {
+          "name": "Create IntelliJ Workspace (Default)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"namespace\": \"{{namespace}}\",\n  \"git_repo\": \"https://github.com/spring-projects/spring-petclinic\",\n  \"memory_limit\": \"8Gi\",\n  \"cpu_limit\": \"2000m\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/workspaces/intellij",
+              "host": ["{{base_url}}"],
+              "path": ["workspaces", "intellij"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create IntelliJ Workspace (Custom)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"namespace\": \"{{namespace}}\",\n  \"git_repo\": \"https://github.com/your-org/your-repo\",\n  \"memory_limit\": \"16Gi\",\n  \"cpu_limit\": \"4000m\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/workspaces/intellij",
+              "host": ["{{base_url}}"],
+              "path": ["workspaces", "intellij"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "VS Code Workspace",
+      "item": [
+        {
+          "name": "Create VS Code Workspace (Default)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"namespace\": \"{{namespace}}\",\n  \"git_repo\": \"https://github.com/quarkusio/quarkus-quickstarts\",\n  \"memory_limit\": \"4Gi\",\n  \"cpu_limit\": \"2000m\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/workspaces/vscode",
+              "host": ["{{base_url}}"],
+              "path": ["workspaces", "vscode"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create VS Code Workspace (Custom)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"namespace\": \"{{namespace}}\",\n  \"git_repo\": \"https://github.com/your-org/your-repo\",\n  \"memory_limit\": \"8Gi\",\n  \"cpu_limit\": \"4000m\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/workspaces/vscode",
+              "host": ["{{base_url}}"],
+              "path": ["workspaces", "vscode"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

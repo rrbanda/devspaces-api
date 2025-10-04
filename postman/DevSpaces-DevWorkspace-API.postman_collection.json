@@ -1,0 +1,261 @@
+{
+  "info": {
+    "name": "DevSpaces DevWorkspace API",
+    "description": "Collection for testing OpenShift DevSpaces DevWorkspace API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearer_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.your-cluster.com:6443",
+      "type": "string"
+    },
+    {
+      "key": "namespace",
+      "value": "admin-devspaces",
+      "type": "string"
+    },
+    {
+      "key": "bearer_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Get OAuth Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-CSRF-Token",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "https://oauth-openshift.apps.your-cluster.com/oauth/authorize?response_type=token&client_id=openshift-challenging-client",
+              "protocol": "https",
+              "host": [
+                "oauth-openshift",
+                "apps",
+                "your-cluster",
+                "com"
+              ],
+              "path": [
+                "oauth",
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "response_type",
+                  "value": "token"
+                },
+                {
+                  "key": "client_id",
+                  "value": "openshift-challenging-client"
+                }
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{username}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{password}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "DevWorkspace Operations",
+      "item": [
+        {
+          "name": "List DevWorkspaces",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/apis/workspace.devfile.io/v1alpha2/namespaces/{{namespace}}/devworkspaces",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "apis",
+                "workspace.devfile.io",
+                "v1alpha2",
+                "namespaces",
+                "{{namespace}}",
+                "devworkspaces"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create IntelliJ DevWorkspace",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apiVersion\": \"workspace.devfile.io/v1alpha2\",\n  \"kind\": \"DevWorkspace\",\n  \"metadata\": {\n    \"name\": \"intellij-test-workspace\",\n    \"namespace\": \"{{namespace}}\"\n  },\n  \"spec\": {\n    \"routingClass\": \"che\",\n    \"started\": false,\n    \"contributions\": [\n      {\n        \"name\": \"ide\",\n        \"uri\": \"https://registry.devfile.io/devfiles/intellij-idea-ultimate/latest\"\n      }\n    ],\n    \"template\": {\n      \"projects\": [\n        {\n          \"name\": \"java-project\",\n          \"git\": {\n            \"remotes\": {\n              \"origin\": \"https://github.com/spring-projects/spring-petclinic\"\n            }\n          }\n        }\n      ],\n      \"components\": [\n        {\n          \"name\": \"universal-developer-image\",\n          \"container\": {\n            \"image\": \"quay.io/devfile/universal-developer-image:ubi8-latest\",\n            \"memoryLimit\": \"4Gi\",\n            \"cpuLimit\": \"2000m\",\n            \"sourceMapping\": \"/projects\",\n            \"env\": [\n              {\n                \"name\": \"JAVA_HOME\",\n                \"value\": \"/usr/lib/jvm/java-11-openjdk\"\n              }\n            ]\n          }\n        }\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/apis/workspace.devfile.io/v1alpha2/namespaces/{{namespace}}/devworkspaces",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "apis",
+                "workspace.devfile.io",
+                "v1alpha2",
+                "namespaces",
+                "{{namespace}}",
+                "devworkspaces"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get DevWorkspace",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/apis/workspace.devfile.io/v1alpha2/namespaces/{{namespace}}/devworkspaces/{{workspace_name}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "apis",
+                "workspace.devfile.io",
+                "v1alpha2",
+                "namespaces",
+                "{{namespace}}",
+                "devworkspaces",
+                "{{workspace_name}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Start DevWorkspace",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/merge-patch+json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"spec\": {\n    \"started\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/apis/workspace.devfile.io/v1alpha2/namespaces/{{namespace}}/devworkspaces/{{workspace_name}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "apis",
+                "workspace.devfile.io",
+                "v1alpha2",
+                "namespaces",
+                "{{namespace}}",
+                "devworkspaces",
+                "{{workspace_name}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Stop DevWorkspace",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/merge-patch+json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"spec\": {\n    \"started\": false\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/apis/workspace.devfile.io/v1alpha2/namespaces/{{namespace}}/devworkspaces/{{workspace_name}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "apis",
+                "workspace.devfile.io",
+                "v1alpha2",
+                "namespaces",
+                "{{namespace}}",
+                "devworkspaces",
+                "{{workspace_name}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete DevWorkspace",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/apis/workspace.devfile.io/v1alpha2/namespaces/{{namespace}}/devworkspaces/{{workspace_name}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "apis",
+                "workspace.devfile.io",
+                "v1alpha2",
+                "namespaces",
+                "{{namespace}}",
+                "devworkspaces",
+                "{{workspace_name}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

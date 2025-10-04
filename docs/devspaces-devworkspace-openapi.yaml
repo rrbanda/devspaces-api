@@ -1,0 +1,206 @@
+openapi: 3.0.3
+info:
+  title: "Dev Spaces \u2013 DevWorkspace Management (OpenShift API)"
+  version: 1.0.0
+  description: "Manage Red Hat OpenShift Dev Spaces workspaces using native OpenShift/Kubernetes\
+    \ APIs.\n\n\U0001F6A9 Notes\n- This spec targets the **DevWorkspace** CRD under\
+    \ API group `workspace.devfile.io`.\n- The version commonly used is `v1alpha2`\
+    \ (set via the `{version}` path param).\n- Authenticate with an **OpenShift OAuth\
+    \ Bearer token** (copy from the OpenShift web console).\n- Base URL is the OpenShift\
+    \ API server (not the console URL).\n"
+servers:
+  - url: https://api.<your-cluster-domain>:6443
+  description: OpenShift API server
+security:
+- BearerAuth: []
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    DevWorkspace:
+      type: object
+      properties:
+        apiVersion:
+          type: string
+          example: workspace.devfile.io/v1alpha2
+        kind:
+          type: string
+          example: DevWorkspace
+        metadata:
+          type: object
+          properties:
+            name:
+              type: string
+            namespace:
+              type: string
+          required:
+          - name
+        spec:
+          type: object
+          properties:
+            started:
+              type: boolean
+              description: Start the workspace when created
+      required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
+    MergePatch:
+      type: object
+      additionalProperties: true
+      example:
+        spec:
+          started: true
+paths:
+  /apis/workspace.devfile.io/{version}/namespaces/{namespace}/devworkspaces:
+    get:
+      summary: List DevWorkspaces
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+          default: v1alpha2
+      - name: namespace
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json: {}
+    post:
+      summary: Create a DevWorkspace
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+          default: v1alpha2
+      - name: namespace
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DevWorkspace'
+            examples:
+              minimal:
+                summary: Minimal DevWorkspace (skeleton)
+                value:
+                  apiVersion: workspace.devfile.io/v1alpha2
+                  kind: DevWorkspace
+                  metadata:
+                    name: example-workspace
+                  spec:
+                    started: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json: {}
+        '400':
+          description: Bad Request
+  /apis/workspace.devfile.io/{version}/namespaces/{namespace}/devworkspaces/{name}:
+    get:
+      summary: Get a DevWorkspace
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+          default: v1alpha2
+      - name: namespace
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json: {}
+    patch:
+      summary: Patch DevWorkspace (start/stop)
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+          default: v1alpha2
+      - name: namespace
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/MergePatch'
+            examples:
+              start:
+                summary: Start
+                value:
+                  spec:
+                    started: true
+              stop:
+                summary: Stop
+                value:
+                  spec:
+                    started: false
+      responses:
+        '200':
+          description: Patched
+          content:
+            application/json: {}
+      parametersx: []
+    delete:
+      summary: Delete a DevWorkspace
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+          default: v1alpha2
+      - name: namespace
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json: {}
