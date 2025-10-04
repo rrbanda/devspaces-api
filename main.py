@@ -8,7 +8,8 @@ import os
 import time
 import asyncio
 from typing import Optional, List, Dict
-from fastapi import FastAPI, HTTPException, Header, Depends
+from fastapi import FastAPI, HTTPException, Header, Depends, Security
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field
 import httpx
 import logging
@@ -71,8 +72,19 @@ config = load_config()
 app = FastAPI(
     title=config["api"]["title"],
     description=config["api"]["description"],
-    version=config["api"]["version"]
+    version=config["api"]["version"],
+    openapi_tags=[
+        {
+            "name": "workspaces",
+            "description": "DevWorkspace management operations",
+        },
+        {
+            "name": "health",
+            "description": "Health check and system information",
+        }
+    ]
 )
+
 
 # Pydantic models
 class WorkspaceRequest(BaseModel):
@@ -103,12 +115,13 @@ class DeleteResponse(BaseModel):
     status: str
     message: str
 
+# Security scheme
+security = HTTPBearer()
+
 # Dependency to get token from Authorization header
-def get_token(authorization: str = Header(...)) -> str:
+def get_token(credentials: HTTPAuthorizationCredentials = Security(security)) -> str:
     """Extract token from Authorization header"""
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Invalid authorization header format")
-    return authorization.replace("Bearer ", "")
+    return credentials.credentials
 
 # HTTP client dependency
 async def get_http_client():
@@ -159,7 +172,7 @@ async def make_openshift_request(
 
 # API Endpoints
 
-@app.get("/", response_model=Dict[str, str])
+@app.get("/", response_model=Dict[str, str], tags=["health"])
 async def root():
     """Root endpoint with API information"""
     return {
@@ -169,12 +182,12 @@ async def root():
         "health": "/health"
     }
 
-@app.get("/health")
+@app.get("/health", tags=["health"])
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "timestamp": time.time()}
 
-@app.get("/workspaces/{namespace}", response_model=WorkspaceListResponse)
+@app.get("/workspaces/{namespace}", response_model=WorkspaceListResponse, tags=["workspaces"])
 async def list_workspaces(
     namespace: str,
     token: str = Depends(get_token),
@@ -211,7 +224,7 @@ async def list_workspaces(
         logger.error(f"Error listing workspaces: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/workspaces/intellij", response_model=WorkspaceResponse)
+@app.post("/workspaces/intellij", response_model=WorkspaceResponse, tags=["workspaces"])
 async def create_intellij_workspace(
     request: IntelliJWorkspaceRequest,
     token: str = Depends(get_token),
@@ -330,7 +343,7 @@ async def create_intellij_workspace(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/workspaces/{namespace}/{name}", response_model=WorkspaceResponse)
+@app.get("/workspaces/{namespace}/{name}", response_model=WorkspaceResponse, tags=["workspaces"])
 async def get_workspace(
     namespace: str,
     name: str,
@@ -363,7 +376,7 @@ async def get_workspace(
         logger.error(f"Error getting workspace: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.delete("/workspaces/{namespace}/{name}", response_model=DeleteResponse)
+@app.delete("/workspaces/{namespace}/{name}", response_model=DeleteResponse, tags=["workspaces"])
 async def delete_workspace(
     namespace: str,
     name: str,

@@ -147,6 +147,17 @@ The API will be available at:
 ![API Documentation](img/api-testing.png)
 *FastAPI interactive documentation and API testing*
 
+### Using Swagger UI
+
+The interactive documentation at `/docs` provides a user-friendly interface to test the API:
+
+1. **Open Swagger UI**: Navigate to `http://localhost:8000/docs`
+2. **Authorize**: Click the 🔒 "Authorize" button at the top right
+3. **Enter Token**: Input your OpenShift Bearer token (e.g., `sha256~...`)
+4. **Test Endpoints**: All workspace endpoints will automatically include your token
+
+> **Note**: The authorization field shown in individual endpoint parameters is automatically handled once you authorize at the top level.
+
 ### API Endpoints
 
 | Method | Endpoint | Description |
@@ -160,11 +171,13 @@ The API will be available at:
 
 ### Authentication
 
-All workspace endpoints require a Bearer token in the Authorization header. 
+All workspace endpoints require a Bearer token in the Authorization header. The API uses standard HTTP Bearer authentication.
 
 **Important**: If you're not logged in to OpenShift, you can use a valid token directly. Test your token first:
 
 > **Security Note**: Never commit real tokens to version control. Use environment variables or secure token management.
+
+#### Testing Your Token
 
 ```bash
 # Test token directly against OpenShift API (with SSL bypass for self-signed certs)
@@ -178,6 +191,16 @@ export OPENSHIFT_TOKEN="YOUR_OPENSHIFT_TOKEN"
 curl -H "Authorization: Bearer $OPENSHIFT_TOKEN" \
      http://localhost:8000/workspaces/admin-devspaces
 ```
+
+#### Swagger UI Authentication
+
+For testing via the interactive documentation:
+
+1. **Open**: `http://localhost:8000/docs`
+2. **Click**: 🔒 "Authorize" button (top right)
+3. **Enter**: Your Bearer token (e.g., `sha256~...`)
+4. **Click**: "Authorize"
+5. **Test**: All endpoints will automatically include your token
 
 ### Example Usage
 
