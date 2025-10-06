@@ -1,6 +1,10 @@
 # DevSpaces DevWorkspace API
 
 This repository provides comprehensive tools and documentation for the OpenShift DevSpaces DevWorkspace API. It includes both shell scripts and a Python FastAPI implementation for managing IntelliJ DevSpaces workspaces.
+<img width="1489" height="840" alt="Screenshot 2025-10-06 at 2 14 22 PM" src="https://github.com/user-attachments/assets/4a238a22-ccae-403f-ad47-ee417799213f" />
+
+<img width="1639" height="723" alt="Screenshot 2025-10-06 at 2 40 51 PM" src="https://github.com/user-attachments/assets/81d689ff-ebea-4312-8076-226c0f035b4d" />
+
 
 ## 📁 Repository Structure
 
